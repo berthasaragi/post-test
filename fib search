@@ -1,0 +1,53 @@
+def fibonacci_search(arr, x):
+    n = len(arr)
+    fib2 = 0
+    fib1 = 1
+    fib = fib1 + fib2
+    
+    # Mencari bilangan Fibonacci terbesar yang lebih kecil atau sama dengan jumlah elemen pada list
+    while fib < n:
+        fib2 = fib1
+        fib1 = fib
+        fib = fib1 + fib2
+    
+    # Menginisialisasi offset untuk menandai elemen pertama dalam pencarian
+    offset = -1
+    while fib > 1:
+        i = min(offset+fib2, n-1)
+        
+        # Jika elemen yang dicari lebih kecil dari elemen pada indeks i, maka bilangan Fibonacci yang lebih kecil digunakan untuk menggerakkan offset
+        if arr[i] < x:
+            fib = fib1
+            fib1 = fib2
+            fib2 = fib - fib1
+            offset = i
+        # Jika elemen yang dicari lebih besar dari elemen pada indeks i, maka bilangan Fibonacci yang lebih besar digunakan untuk menggerakkan offset
+        elif arr[i] > x:
+            fib = fib2
+            fib1 = fib1 - fib2
+            fib2 = fib - fib1
+        # Jika elemen yang dicari ditemukan pada indeks i, maka fungsi mengembalikan indeks i
+        else:
+            return i
+    
+    # Jika elemen yang dicari tidak ditemukan pada list, maka fungsi mengembalikan nilai -1
+    if fib1 and arr[offset+1] == x:
+        return offset+1
+    return -1
+
+
+# List yang akan dicari datanya
+var = ["Arsel", "Avivah", "Daiva", ["Wahyu", "Wibi"]]
+
+# Mencari dan menampilkan data pada indeks tertentu
+print("Arsel di Index", fibonacci_search(var, "Arsel"))
+print("Avivah di Index", fibonacci_search(var, "Avivah"))
+print("Daiva di Index", fibonacci_search(var, "Daiva"))
+
+# Mencari dan menampilkan data pada indeks tertentu dari list yang bersarang
+for i in range(len(var)):
+    if isinstance(var[i], list):
+        if fibonacci_search(var[i], "Wahyu") != -1:
+            print("Wahyu di Index", i, "pada kolom", fibonacci_search(var[i], "Wahyu"))
+        if fibonacci_search(var[i], "Wibi") != -1:
+            print("Wibi di Index", i, "pada kolom", fibonacci_search(var[i], "Wibi"))
